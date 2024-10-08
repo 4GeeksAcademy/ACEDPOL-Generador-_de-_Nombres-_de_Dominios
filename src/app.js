@@ -24,10 +24,13 @@ window.onload = function() {
 };
 
 function getDomain() {
-  let d_;
+  let d_,
+    cont = 0;
   do {
     d_ = generateDomain();
-  } while (!checkDomain(d_));
+    cont++;
+    console.log("Contador = " + cont);
+  } while (!checkDomain(d_) && cont < 100); // ATENCIÓN: Puede petar el PC ~ a.k.a. Acedpol
   return d_;
 }
 
@@ -57,3 +60,31 @@ function rndSelect(list) {
 function rndInt(max) {
   return Math.floor(Math.random() * max);
 }
+
+let pronoun = ["the", "our"];
+let adj = ["great", "big"];
+let noun = ["jogger", "racoon"];
+let dom = [
+  "com", // Global
+  "es" // Epaña
+];
+
+// Otras extensiones:
+//   "net", // Es una de las más antiguas y fue originalmente creada para sitios relacionados con redes (de ahí su nombre, “network”).
+//   "org", // Para organizaciones
+//   "biz", // Para negocios
+//   "name", // Para individuos
+//   "info", // Para información
+//   "pro", // Para profesionales acreditados
+//   "edu", // Educación
+//   "gov", // Gobierno
+//   "mil", // Militar
+//   "blog", // creación de contenido de manera continua
+//   "online", // Destacar la Presencia (otras extensiones ocupadas o deshabilitadas)
+//   "site", // Generica
+//   "cn", // China
+//   "de", // Alemania
+//   "uk", // Reino Unido
+//   "br", // Brasil
+//   "us" // Estados Unidos
+//   "eu" // Europa
