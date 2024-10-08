@@ -11,41 +11,17 @@ window.onload = function() {
   //write your code here
   console.log("Hello Rigo from the console!");
 
+  // Front end
   let domainElement = document.getElementById("domain");
   let newDomain = getDomain();
 
+  // Backend
   if ($(newDomain != undefined)) {
     domainElement.innerHTML = newDomain;
   } else if ($(newDomain === undefined)) {
     alert("All the current domains are taken...");
   }
 };
-
-let pronoun = ["the", "our"];
-let adj = ["great", "big"];
-let noun = ["jogger", "racoon"];
-let dom = [
-  "es",
-  "en",
-  "net",
-  "com",
-  "org",
-  "eu",
-  "biz" / "us",
-  "info",
-  "fr",
-  "edu",
-  "gov",
-  "mil",
-  "blog" / "online",
-  "site",
-  "name",
-  "pro",
-  "cn",
-  "de",
-  "uk",
-  "br"
-];
 
 function getDomain() {
   let d_;
