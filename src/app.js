@@ -16,26 +16,46 @@ window.onload = function() {
   let newDomain = getDomain();
 
   // Backend
-  if ($(newDomain != undefined)) {
+  if (newDomain === undefined) {
+    alert("All the current domains are taken...");
+    domainElement.innerHTML =
+      "It seems that it is not available, please try again!";
+  } else {
     domainElement.innerHTML = newDomain;
+  }
+
+  // Backend
+  if ($(newDomain != undefined)) {
   } else if ($(newDomain === undefined)) {
     alert("All the current domains are taken...");
   }
 };
 
+// Main function of this script finality ~ 'Engine system' a.k.a. Acedpol
 function getDomain() {
+  // Main variables
   let d_,
     cont = 0;
+  const MAX = 500;
+
+  // Main loop
   do {
     d_ = generateDomain();
     cont++;
     console.log("Contador = " + cont);
-  } while (!checkDomain(d_) && cont < 100); // ATENCIÓN: Puede petar el PC ~ a.k.a. Acedpol
+  } while (!checkDomain(d_) && cont < MAX); // CORREGIDO!! :)
+
+  // Time limit
+  if (cont === MAX) {
+    return undefined;
+  }
+
+  // Response
   return d_;
 }
 
 function checkDomain(url) {
-  let length = namesSniped.push();
+  let length = namesSniped.push(); // ATENCIÓN: otro posible caos... lo meto y (con ello dentro) compruebo si lo he metido!
   for (let i = 0; i < length; i++) {
     const e_ = namesSniped[i];
     if (namesSniped.find(url)) {
