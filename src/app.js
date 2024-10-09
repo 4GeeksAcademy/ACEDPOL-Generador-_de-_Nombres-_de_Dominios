@@ -34,19 +34,17 @@ window.onload = function() {
   btn2.addEventListener("click", () => reset());
 
   // Creates and show the new domain generated that is not taken
-  domainElement.innerHTML = "default_blank.url";
   newDomain();
 };
 
 function reset() {
   namesSniped = [];
-  contElement.innerHTML = namesSniped.length + " / " + MAX_ODDS;
-  domainElement.innerHTML = "default_blank.url";
-  namesSniped.push(dom);
+  newDomain();
 }
 
 function newDomain() {
   // Front end
+  console.clear();
   let newDomain = getDomain();
 
   // Backend
@@ -55,7 +53,6 @@ function newDomain() {
     domainElement.innerHTML =
       "It seems that it is not available, please try again!";
   } else {
-    // console.log("Search domain completed!");
     if (namesSniped.length !== 1) {
       contElement.innerHTML = namesSniped.length - 1 + " / " + MAX_ODDS;
     }
@@ -67,30 +64,25 @@ function newDomain() {
 
 // Main function of this script finality ~ 'Engine system' a.k.a. Acedpol
 function getDomain() {
-  // Initial red flag
+  // Default domain created from scratch
   if (namesSniped.length === 0) {
-    //console.log("Exit by zero! (First domain created)");
     let dom = "default_blank.url";
     contElement.innerHTML = namesSniped.length + " / " + MAX_ODDS;
     namesSniped.push(dom);
     return dom;
   }
 
-  // Start point marker
-  console.log("____Generator running____");
-
   // Main variables
   let d_,
     cont = 0;
-  const MAX = 100;
+  const MAX = MAX_ODDS * 10; // number of oportunities
 
   // Main loop
   do {
     cont++;
-    console.log("cont = " + cont);
     d_ = generateDomain();
     console.log(d_);
-  } while (takenDomain(d_) && cont < MAX); // CORREGIDO!! :)
+  } while (takenDomain(d_) && cont < MAX);
 
   // Time limit
   if (cont === MAX) {
@@ -102,17 +94,11 @@ function getDomain() {
 }
 
 function takenDomain(dom) {
-  //console.log("Names actually in use: " + namesSniped.length);
   for (let i = 0; i < namesSniped.length; i++) {
     const e_ = namesSniped[i];
-    // console.log(
-    //   "Entra en el if() -- (Comprueba si el dominio generado se encuentra disponible)"
-    // );
     if (namesSniped.some(e_ => e_ === dom)) {
-      //console.log("Este dominio NO se encuentra disponible: " + e_);
       return true;
     } else {
-      //console.log("DIRECCION DISPONIBLE");
       namesSniped.push(dom); // returns lenght
       return false;
     }
@@ -124,16 +110,12 @@ function generateDomain() {
 }
 
 function rndSlct(list) {
-  // console.log("list = " + list);
-  let ri = rndInt(list.length); // ERROR CATASFRAL: he cambiado de posiciones la 't' y la 'h' de la palabra 'length'
-  // console.log("random int = " + ri);
+  let ri = rndInt(list.length);
   return list[ri];
 }
 
 function rndInt(max) {
-  // console.log("max = " + max);
   let n = Math.floor(Math.random() * max);
-  // console.log("random number = " + n);
   return Math.floor(Math.random() * max);
 }
 
