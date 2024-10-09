@@ -42,6 +42,7 @@ function reset() {
   namesSniped = [];
   contElement.innerHTML = namesSniped.length + " / " + MAX_ODDS;
   domainElement.innerHTML = "default_blank.url";
+  namesSniped.push(dom);
 }
 
 function newDomain() {

@@ -14,40 +14,29 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
-    <div class="container-fluid text-center">
-      <h1 class="mt-5">Hello Rigo!</h1>
-      <img src="./rigo-baby.jpg" />
-      <p class="alert alert-warning mt-4">
-        If this text is <b>not</b> centered and <b>yellow</b>, you probably have
-        an error
-      </p>
-      <div class="fixed-bottom p-4">
-        Made with ❤️ by
-        <a href="https://www.4geeksacademy.com">4Geeks Academy</a>
+    <div class="container-fluid mx-auto text-center mt-5 pt-5">
+      <div>
+        <h1>Generador de Nombres de Dominios</h1>
+        <button
+          id="btnNewDomain"
+          class="col-2 inline-block mx-auto position-relative bg-success text-light"
+        >
+          Create new domain
+          <span
+            id="creations"
+            class="fs-6 ms-2 text-light text-body-primary-emphasis position-absolute top-50 start-100 translate-middle-y badge rounded-pill bg-danger"
+            >+99 <span class="visually-hidden">unread domains</span></span
+          >
+        </button>
       </div>
-      <div class="container-fluid">
-        <div>
-          <button
-            id="btnNewDomain"
-            class="col-2 inline-block mx-auto position-relative bg-success text-light"
-          >
-            Create new domain
-            <span
-              id="creations"
-              class="fs-6 ms-2 text-light text-body-primary-emphasis position-absolute top-50 start-100 translate-middle-y badge rounded-pill bg-danger"
-              >+99 <span class="visually-hidden">unread domains</span></span
-            >
-          </button>
-        </div>
-        <h4 id="domain" class="col-6 inline-block mx-auto"></h4>
-        <div>
-          <button
-            id="btnReset"
-            class="col-1 inline-block mx-auto bg-warning text-light"
-          >
-            Reset
-          </button>
-        </div>
+      <h4 id="domain" class="col-6 inline-block mx-auto"></h4>
+      <div>
+        <button
+          id="btnReset"
+          class="col-1 inline-block mx-auto bg-warning text-light"
+        >
+          Reset
+        </button>
       </div>
     </div>
   </body>
