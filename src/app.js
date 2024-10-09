@@ -128,6 +128,7 @@ function newDomain() {
   } else {
     // if there is no more chances
     alert("All the current domains are taken..."); // WARNING STOP
+    domainElement.className = DOMAIN + " " + DOMAIN_OFF;
     domainElement.innerHTML =
       "It seems that it is not available, please try again!";
     console.log("Couldn't create a new domain...");
