@@ -1,5 +1,7 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
 
-h4 {
+.display_domain {
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: 24px;
+  font-weight: 500;
 }
