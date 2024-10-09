@@ -21,6 +21,7 @@ window.onload = function() {
     domainElement.innerHTML =
       "It seems that it is not available, please try again!";
   } else {
+    console.log("Search domain completed!");
     domainElement.innerHTML = newDomain;
   }
 
@@ -41,9 +42,10 @@ function getDomain() {
   // Main loop
   do {
     d_ = generateDomain();
+    console.log(d_);
     cont++;
     console.log("Contador = " + cont);
-  } while (!checkDomain(d_) && cont < MAX); // CORREGIDO!! :)
+  } while (takenDomain(d_) && cont < MAX); // CORREGIDO!! :)
 
   // Time limit
   if (cont === MAX) {
@@ -54,30 +56,44 @@ function getDomain() {
   return d_;
 }
 
-function checkDomain(url) {
-  let length = namesSniped.push(); // ATENCIÓN: otro posible caos... lo meto y (con ello dentro) compruebo si lo he metido!
-  for (let i = 0; i < length; i++) {
+function takenDomain(url) {
+  console.log("Name actually in use: " + namesSniped.length);
+
+  if (namesSniped.length === 0) {
+    console.log("Exit by zero");
+    namesSniped.push(url); // returns lenght
+    return false;
+  }
+
+  for (let i = 0; i < namesSniped.length; i++) {
     const e_ = namesSniped[i];
-    if (namesSniped.find(url)) {
-      return false;
-    } else {
+    console.log("Entra en el if()");
+    if (namesSniped.some(e_ => e_ === url)) {
+      console.log("Esta dirección ya se ha utilizado " + e_);
       return true;
+    } else {
+      console.log("DIRECCION DISPONIBLE");
+      namesSniped.push(url); // returns lenght
+      return false;
     }
   }
 }
 
 function generateDomain() {
-  return `${rndSelect(pronoun)} + 
-  ${rndSelect(adj)} +
-  ${rndSelect(noun)} + 
-  '.' + ${rndSelect(dom)}`;
+  return `${rndSlct(pronoun)}${rndSlct(adj)}${rndSlct(noun)}.${rndSlct(dom)}`;
 }
 
-function rndSelect(list) {
-  return list[rndInt(list.lenght)];
+function rndSlct(list) {
+  // console.log("list = " + list);
+  let ri = rndInt(list.length); // ERROR CATASFRAL: he cambiado de posiciones la 't' y la 'h' de la palabra 'length'
+  // console.log("random int = " + ri);
+  return list[ri];
 }
 
 function rndInt(max) {
+  // console.log("max = " + max);
+  let n = Math.floor(Math.random() * max);
+  // console.log("random number = " + n);
   return Math.floor(Math.random() * max);
 }
 
