@@ -57,10 +57,11 @@ const MAX_HACKABLES = palabrasHackeables();
 const MAX_ODDS =
   pronoun.length * adj.length * MAX_HACKABLES +
   pronoun.length * adj.length * (noun.length - MAX_HACKABLES) * dom.length;
-const MAX_CHANCES = MAX_ODDS - 15; // nº de oportunidades
+const MAX_CHANCES = MAX_ODDS; // nº de oportunidades
 
 // variables que se actualizan en el tiempo
 let namesSniped = [];
+let possibleDomains = [];
 
 window.onload = function() {
   //write your code here
@@ -83,6 +84,9 @@ window.onload = function() {
   // Sets button RESET feature
   btn2.addEventListener("click", () => reset());
 
+  // Calculo inicial: registra todos los posibles dominios
+  generateAllPossiblesDomains();
+
   // Creates and show the new domain generated that is not taken
   newDomain();
 };
@@ -98,7 +102,14 @@ function desactivaBtn() {
 }
 
 function reset() {
+  // Reset v1: anota los que estan ya usados
   namesSniped = [];
+
+  // Reset v2: extrae entre los posibles uno que este sin usar
+  possibleDomains.forEach(d_ => {
+    d_.isAvailable = true;
+  });
+
   // ACTIVA BTN
   btn.className = BTN + " " + MAIN_CLASSNAME + " " + ON_COLORS;
   btn.innerHTML = "Create new domain" + BTN_SPAN;
@@ -137,6 +148,78 @@ function newDomain() {
 
 // Main function of this script finality ~ 'Engine system' a.k.a. Acedpol
 function getDomain() {
+  // Modo buscador aleatorio:
+  // let DOM = mainLoop()
+
+  // Modo buscador booleano:
+  // let DOM = mainLoop_v2();
+
+  // Modo seleccion aleatoria:
+  let DOM = mainLoop_v3();
+
+  // Response
+  return DOM;
+}
+
+// Modo seleccion aleatoria en lista booleana
+function mainLoop_v3() {
+  let dom = "default_blank.url";
+  let find = false;
+  let k = 0;
+
+  if (!possibleDomains[0].isAvailable) {
+    while (!find && k < MAX_CHANCES) {
+      let i = Math.floor(Math.random() * possibleDomains.length);
+      let aux = possibleDomains[i];
+      k++;
+
+      if (aux.isAvailable) {
+        aux.isAvailable = false;
+        dom = aux.value;
+        find = true;
+      }
+    }
+  } else {
+    let aux = possibleDomains[0];
+    aux.isAvailable = false;
+    dom = aux.value;
+    find = true;
+  }
+
+  if (!find) {
+    dom = undefined;
+  }
+
+  console.log(dom);
+  return dom;
+}
+
+// Modo recorrido booleano
+function mainLoop_v2() {
+  let dom = "default_blank.url";
+  let find = false;
+  let k = 0;
+  while (!find && k < possibleDomains.length) {
+    let aux = possibleDomains[k];
+    k++;
+
+    if (aux.isAvailable) {
+      aux.isAvailable = false;
+      dom = aux.value;
+      find = true;
+    }
+  }
+
+  if (!find) {
+    dom = undefined;
+  }
+
+  console.log(dom);
+  return dom;
+}
+
+// Modo buscador aleatorio
+function mainLoop() {
   // Default generation
   if (namesSniped.length === 0) {
     let defaultDOM = "default_blank.url";
@@ -144,15 +227,15 @@ function getDomain() {
   }
 
   // Main variables
-  let DOM,
+  let dom,
     cont = 0;
 
   // Main loop
   do {
     cont++;
-    DOM = generateDomain(); // UNICO GENERATE
-    console.log("#" + cont + " " + DOM);
-  } while (takenDomain(DOM) && cont < MAX_CHANCES);
+    dom = generateDomain(); // UNICO GENERATE
+    console.log("#" + cont + " " + dom);
+  } while (takenDomain(dom) && cont < MAX_CHANCES);
 
   // Time limit
   if (cont === MAX_CHANCES) {
@@ -160,7 +243,7 @@ function getDomain() {
   }
 
   // Response
-  return DOM;
+  return dom;
 }
 
 function takenDomain(dom) {
@@ -176,6 +259,39 @@ function generateDomain() {
   let hackDomain = stringHacks(domainName);
   if (!hackDomain) return domainName + `.${rndSlct(dom)}`;
   else return hackDomain;
+}
+
+function generateAllPossiblesDomains() {
+  // let record = { value: "example.com", isActive: true };
+  possibleDomains.push({ value: "default_blank.url", isAvailable: true });
+  pronoun.forEach(p_ => {
+    adj.forEach(a_ => {
+      noun.forEach(n_ => {
+        let hack = stringHacks(`${p_}${a_}${n_}`);
+        if (hack === false) {
+          dom.forEach(d_ => {
+            possibleDomains.push({
+              value: `${p_}${a_}${n_}.${d_}`,
+              isAvailable: true
+            });
+          });
+        } else {
+          possibleDomains.push({
+            value: hack,
+            isAvailable: true
+          });
+        }
+      });
+    });
+  });
+
+  console.log("___Generando posibles dominios___");
+  let i = 0;
+  possibleDomains.forEach(d_ => {
+    console.log(i + ": ");
+    console.log(d_);
+    i++;
+  });
 }
 
 function rndSlct(list) {
@@ -202,6 +318,7 @@ function stringHacks(string) {
       h_ = string.slice(0, -3) + "." + str3;
     }
   });
+  console.clear();
   return h_;
 }
 
@@ -212,6 +329,7 @@ function palabrasHackeables() {
       cont++;
     }
   });
+  console.clear();
   return cont;
 }
 
