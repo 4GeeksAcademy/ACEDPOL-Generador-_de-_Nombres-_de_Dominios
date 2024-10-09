@@ -30,24 +30,28 @@ function newDomain() {
     domainElement.innerHTML =
       "It seems that it is not available, please try again!";
   } else {
-    console.log("Search domain completed!");
+    // console.log("Search domain completed!");
     domainElement.innerHTML = newDomain;
   }
+
+  console.log("new domain created: " + newDomain);
 }
 
 // Main function of this script finality ~ 'Engine system' a.k.a. Acedpol
 function getDomain() {
+  console.log("____Generator running____");
+
   // Main variables
   let d_,
     cont = 0;
-  const MAX = 500;
+  const MAX = 100;
 
   // Main loop
   do {
+    cont++;
+    console.log("cont = " + cont);
     d_ = generateDomain();
     console.log(d_);
-    cont++;
-    console.log("Contador = " + cont);
   } while (takenDomain(d_) && cont < MAX); // CORREGIDO!! :)
 
   // Time limit
@@ -60,22 +64,24 @@ function getDomain() {
 }
 
 function takenDomain(url) {
-  console.log("Name actually in use: " + namesSniped.length);
+  //console.log("Names actually in use: " + namesSniped.length);
 
   if (namesSniped.length === 0) {
-    console.log("Exit by zero");
+    //console.log("Exit by zero! (First domain created)");
     namesSniped.push(url); // returns lenght
     return false;
   }
 
   for (let i = 0; i < namesSniped.length; i++) {
     const e_ = namesSniped[i];
-    console.log("Entra en el if()");
+    // console.log(
+    //   "Entra en el if() -- (Comprueba si el dominio generado se encuentra disponible)"
+    // );
     if (namesSniped.some(e_ => e_ === url)) {
-      console.log("Esta dirección ya se ha utilizado " + e_);
+      //console.log("Este dominio NO se encuentra disponible: " + e_);
       return true;
     } else {
-      console.log("DIRECCION DISPONIBLE");
+      //console.log("DIRECCION DISPONIBLE");
       namesSniped.push(url); // returns lenght
       return false;
     }
