@@ -5,6 +5,10 @@ import "./style.css";
 import "./assets/img/rigo-baby.jpg";
 import "./assets/img/4geeks.ico";
 
+// variables para elementos html
+let contElement = document.getElementById("creations");
+let domainElement = document.getElementById("domain");
+
 // variables constantes
 let pronoun = ["the", "our"];
 let adj = ["great", "big"];
@@ -16,10 +20,8 @@ let dom = [
 ];
 const MAX_ODDS = pronoun.length * adj.length * noun.length * dom.length;
 
-// variables que se mantienen en el tiempo
+// variables que se actualizan en el tiempo
 let namesSniped = [];
-let contElement = document.getElementById("creations");
-let domainElement = document.getElementById("domain");
 
 window.onload = function() {
   //write your code here
@@ -43,33 +45,39 @@ function reset() {
 }
 
 function newDomain() {
-  // Front end
+  // Backend
   console.clear();
   let newDomain = getDomain();
+  namesSniped.push(newDomain);
 
-  // Backend
+  // Front end
   if (newDomain === undefined) {
-    alert("All the current domains are taken...");
+    // if there is no more chances
+    alert("All the current domains are taken..."); // WARNING STOP
     domainElement.innerHTML =
       "It seems that it is not available, please try again!";
+    console.log("Couldn't create a new domain...");
   } else {
-    if (namesSniped.length !== 1) {
-      contElement.innerHTML = namesSniped.length - 1 + " / " + MAX_ODDS;
-    }
+    // if success generation is create
     domainElement.innerHTML = newDomain;
+    console.log("New domain created: < " + newDomain + " >");
+    // refresh counter
+    if (namesSniped.length !== 1) {
+      // NO EMPTY list
+      contElement.innerHTML = namesSniped.length - 1 + " / " + MAX_ODDS;
+    } else {
+      // if the list is EMPTY (this is for the start or reset)
+      contElement.innerHTML = "0 / " + MAX_ODDS;
+    }
   }
-
-  console.log("new domain created: " + newDomain);
 }
 
 // Main function of this script finality ~ 'Engine system' a.k.a. Acedpol
 function getDomain() {
-  // Default domain created from scratch
+  // Default generation
   if (namesSniped.length === 0) {
-    let dom = "default_blank.url";
-    contElement.innerHTML = namesSniped.length + " / " + MAX_ODDS;
-    namesSniped.push(dom);
-    return dom;
+    let defaultDOM = "default_blank.url";
+    return defaultDOM;
   }
 
   // Main variables
@@ -99,7 +107,6 @@ function takenDomain(dom) {
     if (namesSniped.some(e_ => e_ === dom)) {
       return true;
     } else {
-      namesSniped.push(dom); // returns lenght
       return false;
     }
   }
