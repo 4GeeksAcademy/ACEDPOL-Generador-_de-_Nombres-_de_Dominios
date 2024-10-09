@@ -12,14 +12,35 @@ let btn = document.getElementById("btnNewDomain");
 let btn2 = document.getElementById("btnReset");
 
 // variables constantes
-let pronoun = ["the", "our"];
-let adj = ["great", "big"];
-let noun = ["jogger", "racoon"];
-let dom = [
+const pronoun = ["the", "our"];
+const adj = ["great", "big"];
+const noun = ["jogger", "racoon", "skates", "doscientosmil", "hummus"];
+const dom = [
   "com", // Global
   "es" // Epaña
 ];
-const MAX_ODDS = pronoun.length * adj.length * noun.length * dom.length;
+const domains = [
+  "net", // Es una de las más antiguas y fue originalmente creada para sitios relacionados con redes (de ahí su nombre, “network”).
+  "org", // Para organizaciones
+  "biz", // Para negocios
+  "name", // Para individuos
+  "info", // Para información
+  "pro", // Para profesionales acreditados
+  "edu", // Educación
+  "gov", // Gobierno
+  "mil", // Militar
+  "blog", // creación de contenido de manera continua
+  "online", // Destacar la Presencia (otras extensiones ocupadas o deshabilitadas)
+  "site", // Generica
+  "es", // España
+  "cn", // China
+  "de", // Alemania
+  "uk", // Reino Unido
+  "br", // Brasil
+  "us", // Estados Unidos
+  "eu", // Europa
+  "com" // Global
+];
 const MAIN_CLASSNAME = "col-2 mb-2 inline-block position-relative";
 const BTN = "btn btn-custom-cursor";
 const DOMAIN = "col-6 inline-block mx-auto display_domain";
@@ -32,6 +53,11 @@ const BTN_SPAN = `<span
                 class="fs-6 ms-2 text-light text-body-primary-emphasis position-absolute top-50 start-100 translate-middle-y badge rounded-pill bg-danger"
                 >OB1+ <span class="visually-hidden">Stack overflow</span></span
               >`;
+const MAX_HACKABLES = palabrasHackeables();
+const MAX_ODDS =
+  pronoun.length * adj.length * MAX_HACKABLES +
+  pronoun.length * adj.length * (noun.length - MAX_HACKABLES) * dom.length;
+const MAX_CHANCES = MAX_ODDS * 5; // nº de oportunidades
 
 // variables que se actualizan en el tiempo
 let namesSniped = [];
@@ -48,14 +74,9 @@ window.onload = function() {
       domainElement.className = DOMAIN + " " + DOMAIN_ON;
       // MAIN LOOP
       newDomain();
-    } else if (!btn.className.includes("disable", MAIN_CLASSNAME.length)) {
-      // DESACTIVA BTN
-      btn.className = BTN + " " + MAIN_CLASSNAME + " disabled " + OFF_COLORS;
-      btn.innerHTML = "Limit reached!!" + BTN_SPAN;
-      contElement = document.getElementById("creations"); // vuelve de cero
-      domainElement.className = DOMAIN + " " + DOMAIN_OFF;
-      // FULL list
-      contElement.innerHTML = "OB1+";
+      if (namesSniped.length > MAX_ODDS) {
+        desactivaBtn();
+      }
     }
   });
 
@@ -65,6 +86,16 @@ window.onload = function() {
   // Creates and show the new domain generated that is not taken
   newDomain();
 };
+
+function desactivaBtn() {
+  // DESACTIVA BTN
+  btn.className = BTN + " " + MAIN_CLASSNAME + " disabled " + OFF_COLORS;
+  btn.innerHTML = "Limit reached!!" + BTN_SPAN;
+  contElement = document.getElementById("creations"); // vuelve de cero
+  domainElement.className = DOMAIN + " " + DOMAIN_OFF;
+  // FULL list
+  contElement.innerHTML = namesSniped.length - 1 + " / " + MAX_ODDS;
+}
 
 function reset() {
   namesSniped = [];
@@ -116,17 +147,16 @@ function getDomain() {
   // Main variables
   let DOM,
     cont = 0;
-  const MAX = MAX_ODDS * 10; // number of oportunities
 
   // Main loop
   do {
     cont++;
-    DOM = generateDomain();
-    console.log(DOM);
-  } while (takenDomain(DOM) && cont < MAX);
+    DOM = generateDomain(); // UNICO GENERATE
+    console.log("#" + cont + " " + DOM);
+  } while (takenDomain(DOM) && cont < MAX_CHANCES);
 
   // Time limit
-  if (cont === MAX) {
+  if (cont === MAX_CHANCES) {
     return undefined;
   }
 
@@ -135,18 +165,18 @@ function getDomain() {
 }
 
 function takenDomain(dom) {
-  for (let i = 0; i < namesSniped.length; i++) {
-    const e_ = namesSniped[i];
-    if (namesSniped.some(e_ => e_ === dom)) {
-      return true;
-    } else {
-      return false;
-    }
+  if (namesSniped.some(e_ => e_ === dom)) {
+    return true;
+  } else {
+    return false;
   }
 }
 
 function generateDomain() {
-  return `${rndSlct(pronoun)}${rndSlct(adj)}${rndSlct(noun)}.${rndSlct(dom)}`;
+  let domainName = `${rndSlct(pronoun)}${rndSlct(adj)}${rndSlct(noun)}`;
+  let hackDomain = stringHacks(domainName);
+  if (!hackDomain) return domainName + `.${rndSlct(dom)}`;
+  else return hackDomain;
 }
 
 function rndSlct(list) {
@@ -159,7 +189,34 @@ function rndInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-// Otras extensiones:
+function stringHacks(string) {
+  let str2 = string.substring(string.length - 2); // Obtiene las últimas 2 letras
+  let str3 = string.substring(string.length - 3); // Obtiene las últimas 3 letras
+
+  let h_ = false;
+  domains.forEach(d_ => {
+    if (d_ === str2) {
+      console.log("match 2: " + string.slice(0, -2) + "." + str2);
+      h_ = string.slice(0, -2) + "." + str2;
+    } else if (d_ === str3) {
+      console.log("match 3: " + string.slice(0, -3) + "." + str3);
+      h_ = string.slice(0, -3) + "." + str3;
+    }
+  });
+  return h_;
+}
+
+function palabrasHackeables() {
+  let cont = 0;
+  noun.forEach(n_ => {
+    if (stringHacks(n_) !== false) {
+      cont++;
+    }
+  });
+  return cont;
+}
+
+// Todas las extensiones:
 //   "net", // Es una de las más antiguas y fue originalmente creada para sitios relacionados con redes (de ahí su nombre, “network”).
 //   "org", // Para organizaciones
 //   "biz", // Para negocios
@@ -172,9 +229,11 @@ function rndInt(max) {
 //   "blog", // creación de contenido de manera continua
 //   "online", // Destacar la Presencia (otras extensiones ocupadas o deshabilitadas)
 //   "site", // Generica
+//   "es", // España
 //   "cn", // China
 //   "de", // Alemania
 //   "uk", // Reino Unido
 //   "br", // Brasil
-//   "us" // Estados Unidos
-//   "eu" // Europa
+//   "us", // Estados Unidos
+//   "eu", // Europa
+//   "com" // Global
