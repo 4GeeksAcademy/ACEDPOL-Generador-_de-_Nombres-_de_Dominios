@@ -26,9 +26,19 @@
         <a href="https://www.4geeksacademy.com">4Geeks Academy</a>
       </div>
       <div class="container-fluid">
-        <button id="btnNewDomain" class="col-2 inline-block mx-auto">
-          Create new domain
-        </button>
+        <div>
+          <button
+            id="btnNewDomain"
+            class="col-2 inline-block mx-auto position-relative"
+          >
+            Create new domain
+            <span
+              id="creations"
+              class="fs-6 ms-2 text-secondary text-body-primary-emphasis position-absolute top-50 start-100 translate-middle-y badge rounded-pill bg-warning"
+              >+99 <span class="visually-hidden">unread domains</span></span
+            >
+          </button>
+        </div>
         <h4 id="domain" class="col-6 inline-block mx-auto"></h4>
       </div>
     </div>

@@ -5,7 +5,9 @@ import "./style.css";
 import "./assets/img/rigo-baby.jpg";
 import "./assets/img/4geeks.ico";
 
+// variables que se mantienen en el tiempo
 let namesSniped = [];
+let contElement = document.getElementById("creations");
 
 window.onload = function() {
   //write your code here
@@ -60,6 +62,7 @@ function getDomain() {
   }
 
   // Response
+  contElement.innerHTML = namesSniped.length;
   return d_;
 }
 
@@ -68,7 +71,7 @@ function takenDomain(url) {
 
   if (namesSniped.length === 0) {
     //console.log("Exit by zero! (First domain created)");
-    namesSniped.push(url); // returns lenght
+    namesSniped.push(url);
     return false;
   }
 
