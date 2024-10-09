@@ -57,7 +57,7 @@ const MAX_HACKABLES = palabrasHackeables();
 const MAX_ODDS =
   pronoun.length * adj.length * MAX_HACKABLES +
   pronoun.length * adj.length * (noun.length - MAX_HACKABLES) * dom.length;
-const MAX_CHANCES = MAX_ODDS * 5; // nº de oportunidades
+const MAX_CHANCES = MAX_ODDS - 15; // nº de oportunidades
 
 // variables que se actualizan en el tiempo
 let namesSniped = [];
@@ -91,7 +91,7 @@ function desactivaBtn() {
   // DESACTIVA BTN
   btn.className = BTN + " " + MAIN_CLASSNAME + " disabled " + OFF_COLORS;
   btn.innerHTML = "Limit reached!!" + BTN_SPAN;
-  contElement = document.getElementById("creations"); // vuelve de cero
+  contElement = document.getElementById("creations"); // vuelve de fabrica
   domainElement.className = DOMAIN + " " + DOMAIN_OFF;
   // FULL list
   contElement.innerHTML = namesSniped.length - 1 + " / " + MAX_ODDS;
@@ -109,19 +109,11 @@ function reset() {
 }
 
 function newDomain() {
-  // Backend
   console.clear();
-  let newDomain = getDomain();
-  namesSniped.push(newDomain); // +01
-
-  // Front end
-  if (newDomain === undefined) {
-    // if there is no more chances
-    alert("All the current domains are taken..."); // WARNING STOP
-    domainElement.innerHTML =
-      "It seems that it is not available, please try again!";
-    console.log("Couldn't create a new domain...");
-  } else {
+  let newDomain = getDomain(); // LOGIC
+  if (newDomain !== undefined) {
+    // +01
+    namesSniped.push(newDomain);
     // if success generation is create
     domainElement.innerHTML = newDomain;
     console.log("New domain created: < " + newDomain + " >");
@@ -133,6 +125,12 @@ function newDomain() {
       // if the list is EMPTY (this is for the start or reset)
       contElement.innerHTML = "0 / " + MAX_ODDS;
     }
+  } else {
+    // if there is no more chances
+    alert("All the current domains are taken..."); // WARNING STOP
+    domainElement.innerHTML =
+      "It seems that it is not available, please try again!";
+    console.log("Couldn't create a new domain...");
   }
 }
 
