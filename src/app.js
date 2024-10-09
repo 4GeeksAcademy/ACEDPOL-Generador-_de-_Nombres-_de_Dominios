@@ -11,6 +11,15 @@ window.onload = function() {
   //write your code here
   console.log("Hello Rigo from the console!");
 
+  // Sets the generator button functionality
+  let btn = document.getElementById("btnNewDomain");
+  btn.addEventListener("click", () => newDomain());
+
+  // Creates and show the new domain generated that is not taken
+  newDomain();
+};
+
+function newDomain() {
   // Front end
   let domainElement = document.getElementById("domain");
   let newDomain = getDomain();
@@ -24,13 +33,7 @@ window.onload = function() {
     console.log("Search domain completed!");
     domainElement.innerHTML = newDomain;
   }
-
-  // Backend
-  if ($(newDomain != undefined)) {
-  } else if ($(newDomain === undefined)) {
-    alert("All the current domains are taken...");
-  }
-};
+}
 
 // Main function of this script finality ~ 'Engine system' a.k.a. Acedpol
 function getDomain() {
