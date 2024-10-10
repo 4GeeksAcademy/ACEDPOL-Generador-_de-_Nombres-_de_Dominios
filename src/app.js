@@ -146,6 +146,9 @@ function newDomain() {
       "It seems that it is not available, please try again!";
     console.log("Couldn't create a new domain...");
   }
+
+  // Muestra lo que pedía el ejercicio en un principio...
+  printArray(possibleDomains);
 }
 
 // Main function of this script finality ~ 'Engine system' a.k.a. Acedpol
@@ -226,6 +229,16 @@ function palabrasHackeables() {
   });
   console.clear();
   return cont;
+}
+
+function printArray(list) {
+  console.log("___Mostrando valores disponibles___");
+  let i = 0;
+  list.forEach(d_ => {
+    console.log("#" + i + ": " + d_);
+    i++;
+  });
+  console.log("---");
 }
 
 // Todas las extensiones:
