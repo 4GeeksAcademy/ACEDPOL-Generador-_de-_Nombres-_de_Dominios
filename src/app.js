@@ -85,7 +85,8 @@ window.onload = function() {
   btn2.addEventListener("click", () => reset());
 
   // Calculo inicial: registra todos los posibles dominios
-  generateAllPossiblesDomains();
+  // generateAllPossiblesDomains();
+  generateAllPossiblesDomains_v2();
 
   // Creates and show the new domain generated that is not taken
   newDomain();
@@ -102,13 +103,18 @@ function desactivaBtn() {
 }
 
 function reset() {
-  // Reset v1: anota los que estan ya usados
+  // Reset v3: reestablece la lista de nombres posibles
+  // printArray(possibleDomains);
+  possibleDomains = namesSniped.concat(possibleDomains);
+  // printArray(possibleDomains);
+
+  // Reset v1: borra la lista de los que estan ya usados
   namesSniped = [];
 
-  // Reset v2: extrae entre los posibles uno que este sin usar
-  possibleDomains.forEach(d_ => {
-    d_.isAvailable = true;
-  });
+  // Reset v2: reestablece los posibles a disponibles
+  // possibleDomains.forEach((d_) => {
+  //   d_.isAvailable = true;
+  // });
 
   // ACTIVA BTN
   btn.className = BTN + " " + MAIN_CLASSNAME + " " + ON_COLORS;
@@ -155,10 +161,60 @@ function getDomain() {
   // let DOM = mainLoop_v2();
 
   // Modo seleccion aleatoria:
-  let DOM = mainLoop_v3();
+  // let DOM = mainLoop_v3();
+
+  // Modo pila:
+  // let DOM = mainLoop_v4();
+
+  // Modo seleccion aleatoria por descarte:
+  let DOM = mainLoop_v5();
 
   // Response
   return DOM;
+}
+
+// Modo seleccion aleatoria por descarte
+function mainLoop_v5() {
+  let dom = "default_blank.url";
+
+  if (namesSniped.length !== 0) {
+    if (possibleDomains.length > 0) {
+      // Selecciona entre los posibles aleatoriamente
+      let rnd = Math.floor(Math.random() * possibleDomains.length);
+      dom = possibleDomains[rnd];
+      // Reestablece la lista (borra la selección)
+      let remainings = [];
+      for (let k = 0; k < possibleDomains.length; k++) {
+        if (k !== rnd) remainings.push(possibleDomains[k]);
+      }
+      // Actualiza la lista
+      possibleDomains = remainings;
+    } else {
+      dom = undefined;
+    }
+  }
+
+  console.log(dom);
+  return dom;
+}
+
+// Modo pila
+function mainLoop_v4() {
+  let dom = "default_blank.url";
+
+  if (namesSniped.length !== 0) {
+    if (possibleDomains.length > 0) {
+      dom = possibleDomains.pop();
+    } else {
+      dom = undefined;
+    }
+  } else {
+    possibleDomains = possibleDomains.reverse();
+    dom = possibleDomains.pop();
+  }
+
+  console.log(dom);
+  return dom;
 }
 
 // Modo seleccion aleatoria en lista booleana
@@ -261,6 +317,24 @@ function generateDomain() {
   else return hackDomain;
 }
 
+function generateAllPossiblesDomains_v2() {
+  possibleDomains.push("default_blank.url");
+  pronoun.forEach(p_ => {
+    adj.forEach(a_ => {
+      noun.forEach(n_ => {
+        let hack = stringHacks(`${p_}${a_}${n_}`);
+        if (hack === false) {
+          dom.forEach(d_ => {
+            possibleDomains.push(`${p_}${a_}${n_}.${d_}`);
+          });
+        } else {
+          possibleDomains.push(hack);
+        }
+      });
+    });
+  });
+}
+
 function generateAllPossiblesDomains() {
   // let record = { value: "example.com", isActive: true };
   possibleDomains.push({ value: "default_blank.url", isAvailable: true });
@@ -284,10 +358,12 @@ function generateAllPossiblesDomains() {
       });
     });
   });
+}
 
-  console.log("___Generando posibles dominios___");
+function printArray(list) {
+  console.log("___Mostrando valores disponibles___");
   let i = 0;
-  possibleDomains.forEach(d_ => {
+  list.forEach(d_ => {
     console.log(i + ": ");
     console.log(d_);
     i++;
