@@ -176,22 +176,24 @@ function getDomain() {
 // Modo seleccion aleatoria por descarte
 function mainLoop_v5() {
   let dom = "default_blank.url";
+  let rnd = 0; // default value
 
   if (namesSniped.length !== 0) {
-    if (possibleDomains.length > 0) {
-      // Selecciona entre los posibles aleatoriamente
-      let rnd = Math.floor(Math.random() * possibleDomains.length);
-      dom = possibleDomains[rnd];
-      // Reestablece la lista (borra la selección)
-      let remainings = [];
-      for (let k = 0; k < possibleDomains.length; k++) {
-        if (k !== rnd) remainings.push(possibleDomains[k]);
-      }
-      // Actualiza la lista
-      possibleDomains = remainings;
-    } else {
-      dom = undefined;
+    rnd = Math.floor(Math.random() * possibleDomains.length);
+  }
+
+  if (possibleDomains.length > 0) {
+    // Selecciona entre los posibles aleatoriamente
+    dom = possibleDomains[rnd];
+    // Reestablece la lista (borra la selección)
+    let remainings = [];
+    for (let k = 0; k < possibleDomains.length; k++) {
+      if (k !== rnd) remainings.push(possibleDomains[k]);
     }
+    // Actualiza la lista
+    possibleDomains = remainings;
+  } else {
+    dom = undefined;
   }
 
   console.log(dom);
